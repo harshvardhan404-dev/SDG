@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Tracker App for Students</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .login-form, .dashboard, .leaderboard, .class-report {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 {
+            color: #4CAF50;
+            text-align: center;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .toggle {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .sdg-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .sdg-icon {
+            background-color: #e0f2f1;
+            height: 0;
+            padding-bottom: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+        .sdg-icon:hover {
+            transform: scale(1.05);
+        }
+        .progress-container {
+            margin-top: 20px;
+        }
+        .progress-bar {
+            height: 25px;
+            background-color: #e0e0e0;
+            border-radius: 12.5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress {
+            width: 75%;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 12.5px;
+            text-align: right;
+            color: white;
+            line-height: 25px;
+            padding-right: 10px;
+            transition: width 1s ease-in-out;
+        }
+        .task-list {
+            margin-top: 20px;
+        }
+        .task-item {
+            background-color: #f1f8e9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            background-color: #f1f8e9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .rank {
+            font-weight: bold;
+            margin-right: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            width: 48%;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: block;
+        }
+        .class-progress {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .class-progress-item {
+            width: 48%;
+            margin-bottom: 15px;
+        }
+        .sdg1{
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-screen">
+            <h1>Welcome to SDG Tracker!</h1>
+            <img src="/images/logo.jpg" alt="SDG Tracker Logo" class="avatar">
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
+                <button onclick="login()">Login</button>
+                <div class="toggle">
+                    <label>
+                        <input type="checkbox" id="teacher-toggle"> I'm a teacher
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div id="dashboard" style="display: none;">
+            <h1>Student Dashboard</h1>
+            <img src="/images/ava.jpg" alt="Student Avatar" class="avatar">
+            <div class="dashboard">
+                <h2>Hello, <span id="user-name"></span>!</h2>
+                <div class="progress-container">
+                    <h3>Your Overall Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress">75%</div>
+                    </div>
+                </div>
+                <h3>Your SDGs</h3>
+                <div class="sdg-grid">
+                    <div class="sdg-icon">SDG 1</div>
+                    <div class="sdg-icon">SDG 2</div>
+                    <div class="sdg-icon">SDG 3</div>
+                    <div class="sdg-icon">SDG 4</div>
+                    <div class="sdg-icon">SDG 5</div>
+                    <div class="sdg-icon">SDG 6</div>
+                </div>
+                <h3>Upcoming Tasks</h3>
+                <div class="task-list">
+                    <div class="task-item">🎓 Complete SDG 4 quiz</div>
+                    <div class="task-item">♻️ Update recycling project</div>
+                    <div class="task-item">🌿 Volunteer for local cleanup</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button onclick="showLeaderboard()">View Leaderboard</button>
+                <button onclick="showClassReport()">Class Progress</button>
+            </div>
+        </div>
+        
+        <div id="leaderboard" style="display: none;">
+            <h1>Community Leaderboard</h1>
+            <div class="leaderboard">
+                <div class="leaderboard-item">
+                    <span class="rank">1</span>
+                    <div>
+                        <strong>Team Alpha</strong>
+                        <div>500 points</div>
+                    </div>
+                </div>
+                <div class="leaderboard-item">
+                    <span class="rank">2</span>
+                    <div>
+                        <strong>Eco Warriors</strong>
+                        <div>480 points</div>
+                    </div>
+                </div>
+                <div class="leaderboard-item">
+                    <span class="rank">3</span>
+                    <div>
+                        <strong>SDG Champions</strong>
+                        <div>450 points</div>
+                    </div>
+                </div>
+                <div class="leaderboard-item">
+                    <span class="rank">4</span>
+                    <div>
+                        <strong>Green Innovators</strong>
+                        <div>420 points</div>
+                    </div>
+                </div>
+                <div class="leaderboard-item">
+                    <span class="rank">5</span>
+                    <div>
+                        <strong>Sustainability Squad</strong>
+                        <div>400 points</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button onclick="showDashboard()">Back to Dashboard</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div id="class-report" style="display: none;">
+            <h1>Class Progress Report</h1>
+            <div class="class-report">
+                <div class="class-progress">
+                    <div class="class-progress-item">
+                        <h3>SDG 1: No Poverty</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 65%;">65%</div>
+                        </div>
+                    </div>
+                    <div class="class-progress-item">
+                        <h3>SDG 2: Zero Hunger</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 80%;">80%</div>
+                        </div>
+                    </div>
+                    <div class="class-progress-item">
+                        <h3>SDG 3: Good Health</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 70%;">70%</div>
+                        </div>
+                    </div>
+                    <div class="class-progress-item">
+                        <h3>SDG 4: Quality Education</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 85%;">85%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button onclick="showDashboard()">Back to Dashboard</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var isTeacher = document.getElementById('teacher-toggle').checked;
+
+            if (username && password) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('user-name').textContent = username;
+            } else {
+                alert('Please enter both username and password.');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('leaderboard').style.display = 'none';
+            document.getElementById('class-report').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+
+        function showLeaderboard() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('class-report').style.display = 'none';
+            document.getElementById('leaderboard').style.display = 'block';
+        }
+
+        function showClassReport() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('leaderboard').style.display = 'none';
+            document.getElementById('class-report').style.display = 'block';
+        }
+
+        function logout() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('leaderboard').style.display = 'none';
+            document.getElementById('class-report').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('teacher-toggle').checked = false;
+        }
+    </script>
+</body>
+</html>
